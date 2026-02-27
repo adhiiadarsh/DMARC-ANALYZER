@@ -2,42 +2,54 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>ZeroSpoof - DMARC Analyzer</title>
+<title>ZeroSpoof | DMARC Intelligence</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600&family=Poppins:wght@300;500&display=swap" rel="stylesheet">
 
 <style>
 
 /* ===========================
-BACKGROUND ANIMATION
+CYBER BACKGROUND
 =========================== */
 
 body{
     margin:0;
-    font-family:Segoe UI, sans-serif;
-    background:#020409;
+    font-family:Poppins,sans-serif;
     color:white;
+    height:100vh;
     overflow:hidden;
+    background:radial-gradient(circle at center,#05070d,#000);
 }
 
-/* Moving grid animation */
+/* animated glow */
 body::before{
     content:"";
     position:fixed;
     width:200%;
     height:200%;
     background:
-    linear-gradient(#00ffc822 1px, transparent 1px),
-    linear-gradient(90deg,#00ffc822 1px, transparent 1px);
-    background-size:50px 50px;
-    animation:gridMove 20s linear infinite;
+    radial-gradient(circle,#00ffc822 1px,transparent 1px);
+    background-size:40px 40px;
+    animation:move 25s linear infinite;
+    z-index:-2;
 }
 
-@keyframes gridMove{
+@keyframes move{
     from{transform:translate(0,0);}
-    to{transform:translate(-50px,-50px);}
+    to{transform:translate(-40px,-40px);}
+}
+
+/* floating particles */
+
+canvas{
+    position:fixed;
+    top:0;
+    left:0;
+    z-index:-1;
 }
 
 /* ===========================
-MAIN CONTAINER
+MAIN GLASS PANEL
 =========================== */
 
 .container{
@@ -45,107 +57,113 @@ MAIN CONTAINER
     top:50%;
     left:50%;
     transform:translate(-50%,-50%);
-    background:#0d1117;
-    padding:40px;
-    border-radius:15px;
-    width:520px;
+    width:550px;
+    padding:45px;
+    border-radius:18px;
+
+    background:rgba(15,20,30,0.55);
+    backdrop-filter:blur(18px);
+
+    border:1px solid #00ffc855;
+    box-shadow:
+        0 0 40px #00ffc822,
+        inset 0 0 20px #00ffc811;
+
     text-align:center;
-    box-shadow:0 0 30px #00ffc855;
-    backdrop-filter:blur(10px);
 }
 
 h1{
+    font-family:Orbitron;
+    letter-spacing:2px;
     color:#00ffc8;
-    text-shadow:0 0 15px #00ffc8;
-}
-
-input{
-    width:80%;
-    padding:12px;
-    font-size:16px;
-    border-radius:6px;
-    border:none;
-    outline:none;
-}
-
-button{
-    margin-top:15px;
-    padding:12px 25px;
-    font-size:16px;
-    background:#00ffc8;
-    border:none;
-    border-radius:6px;
-    font-weight:bold;
-    cursor:pointer;
-    transition:0.3s;
-}
-
-button:hover{
-    transform:scale(1.05);
-    box-shadow:0 0 15px #00ffc8;
+    text-shadow:0 0 20px #00ffc8;
 }
 
 /* ===========================
-RESULT AREA
+INPUT FIELD
+=========================== */
+
+input{
+    width:85%;
+    padding:14px;
+    border-radius:8px;
+    border:none;
+    outline:none;
+    font-size:16px;
+    background:#020409;
+    color:#00ffc8;
+    box-shadow:0 0 10px #00ffc822 inset;
+}
+
+/* ===========================
+BUTTON
+=========================== */
+
+button{
+    margin-top:18px;
+    padding:14px 30px;
+    border:none;
+    border-radius:8px;
+    font-weight:bold;
+    cursor:pointer;
+    background:linear-gradient(45deg,#00ffc8,#00aaff);
+    color:black;
+    transition:.4s;
+}
+
+button:hover{
+    transform:scale(1.08);
+    box-shadow:0 0 25px #00ffc8;
+}
+
+/* ===========================
+SCANNER RING
+=========================== */
+
+.scanner{
+    width:130px;
+    height:130px;
+    margin:20px auto;
+    border-radius:50%;
+    border:3px solid #00ffc8;
+    animation:rotate 4s linear infinite;
+    box-shadow:0 0 25px #00ffc8;
+}
+
+@keyframes rotate{
+    100%{transform:rotate(360deg);}
+}
+
+/* ===========================
+RESULT PANEL
 =========================== */
 
 #result{
     margin-top:25px;
     padding:20px;
-    border-radius:8px;
     background:#020409;
-    min-height:120px;
+    border-radius:10px;
+    min-height:130px;
+    box-shadow:inset 0 0 15px #00ffc822;
 }
 
-.success{color:#00ff9f;}
-.fail{color:#ff4d4d;}
+.success{color:#00ff9f}
+.fail{color:#ff4d4d}
 .loading{color:#ffaa00}
 
-/* ===========================
-SCANNER ANIMATION
-=========================== */
-
-.scanner{
-    width:120px;
-    height:120px;
-    border-radius:50%;
-    border:3px solid #00ffc8;
-    margin:15px auto;
-    position:relative;
-    overflow:hidden;
-}
-
-.scan-line{
-    position:absolute;
-    width:100%;
-    height:4px;
-    background:#00ffc8;
-    box-shadow:0 0 20px #00ffc8;
-    animation:scan 1.5s linear infinite;
-}
-
-@keyframes scan{
-    0%{top:0;}
-    100%{top:100%;}
-}
-
-/* typing effect */
-.typing{
-    border-right:2px solid #00ffc8;
-    white-space:nowrap;
-    overflow:hidden;
-    animation:typing 2s steps(40,end);
-}
-
-@keyframes typing{
-    from{width:0}
-    to{width:100%}
-}
-
 .footer{
-    margin-top:10px;
+    margin-top:15px;
+    color:#777;
     font-size:12px;
-    color:#888;
+}
+
+.typing{
+    animation:fadeIn 1s ease;
+}
+
+@keyframes fadeIn{
+    from{opacity:0;transform:translateY(10px)}
+    to{opacity:1}
 }
 
 </style>
@@ -153,99 +171,133 @@ SCANNER ANIMATION
 
 <body>
 
+<canvas id="particles"></canvas>
+
 <div class="container">
 
-<h1>🛡️ ZeroSpoof</h1>
+<h1>🛡 ZeroSpoof</h1>
+<p>DMARC Intelligence & Email Spoof Detection</p>
 
-<p>Advanced DMARC Intelligence Scanner</p>
-
-<input id="domain" placeholder="example.com">
+<input id="domain" placeholder="target-domain.com">
 
 <br>
+<button onclick="checkDMARC()">Initiate Scan</button>
 
-<button onclick="checkDMARC()">Start Scan</button>
-
-<div id="result">Awaiting Target Domain...</div>
+<div id="result">System Idle — Awaiting Target</div>
 
 <div class="footer">
-Cyber Security Tool • AI DMARC Analyzer
+ZeroSpoof Cyber Defense Engine v2.0
 </div>
 
 </div>
 
 <script>
 
-function validateDomain(domain){
-    let regex=/^(?!:\/\/)([a-zA-Z0-9-]+\.)+[a-zA-Z]{2,}$/;
-    return regex.test(domain);
+/* =====================
+PARTICLE BACKGROUND
+===================== */
+
+const canvas=document.getElementById("particles");
+const ctx=canvas.getContext("2d");
+
+canvas.width=window.innerWidth;
+canvas.height=window.innerHeight;
+
+let particles=[];
+
+for(let i=0;i<80;i++){
+    particles.push({
+        x:Math.random()*canvas.width,
+        y:Math.random()*canvas.height,
+        r:Math.random()*2
+    });
 }
+
+function animate(){
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+
+    ctx.fillStyle="#00ffc8";
+    particles.forEach(p=>{
+        ctx.beginPath();
+        ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
+        ctx.fill();
+
+        p.y+=0.2;
+        if(p.y>canvas.height)p.y=0;
+    });
+
+    requestAnimationFrame(animate);
+}
+animate();
+
+/* =====================
+DOMAIN VALIDATION
+===================== */
+
+function validateDomain(domain){
+return /^(?!:\/\/)([a-zA-Z0-9-]+\.)+[a-zA-Z]{2,}$/.test(domain);
+}
+
+/* =====================
+DMARC SCAN
+===================== */
 
 async function checkDMARC(){
 
-    let domain=document.getElementById("domain").value.trim();
-    let result=document.getElementById("result");
+let domain=document.getElementById("domain").value.trim();
+let result=document.getElementById("result");
 
-    if(!validateDomain(domain)){
-        result.innerHTML=
-        "<span class='fail'>❌ Invalid Domain Name</span>";
-        return;
-    }
+if(!validateDomain(domain)){
+result.innerHTML="<span class='fail'>❌ Invalid Domain</span>";
+return;
+}
 
-    /* SCANNING ANIMATION */
+result.innerHTML=`
+<div class="loading">
+<div class="scanner"></div>
+Analyzing DNS Intelligence...
+</div>`;
 
-    result.innerHTML=`
-        <div class="loading">
-        <div class="scanner">
-            <div class="scan-line"></div>
-        </div>
-        🔎 Initializing ZeroSpoof Scan...
-        </div>
-    `;
+await new Promise(r=>setTimeout(r,1500));
 
-    await new Promise(r=>setTimeout(r,1500));
+try{
 
-    try{
+let response=await fetch(`https://dns.google/resolve?name=_dmarc.${domain}&type=TXT`);
+let data=await response.json();
 
-        let url=`https://dns.google/resolve?name=_dmarc.${domain}&type=TXT`;
+if(data.Answer){
 
-        let response=await fetch(url);
-        let data=await response.json();
+let record=data.Answer[0].data.replace(/"/g,'');
 
-        if(data.Answer){
+let policy="Unknown";
 
-            let record=data.Answer[0].data.replace(/"/g,'');
+if(record.includes("p=reject"))
+policy="🛑 REJECT — Maximum Security";
+else if(record.includes("p=quarantine"))
+policy="⚠ QUARANTINE — Moderate Security";
+else if(record.includes("p=none"))
+policy="👁 MONITOR MODE";
 
-            let policy="Unknown";
+result.innerHTML=`
+<div class="success typing">
+✅ DMARC Protection Enabled
+<br><br>
+<b>Policy:</b> ${policy}
+<br><br>
+<b>Record:</b><br>${record}
+</div>`;
 
-            if(record.includes("p=reject"))
-                policy="REJECT (Maximum Protection)";
-            else if(record.includes("p=quarantine"))
-                policy="QUARANTINE (Medium Protection)";
-            else if(record.includes("p=none"))
-                policy="MONITOR MODE";
+}else{
+result.innerHTML="<span class='fail'>❌ No DMARC Record Found</span>";
+}
 
-            result.innerHTML=`
-            <div class="success typing">
-            ✅ DMARC PROTECTED
-            <br><br>
-            <b>Policy:</b> ${policy}
-            <br><br>
-            <b>Record:</b><br>${record}
-            </div>`;
-        }
-        else{
-            result.innerHTML=
-            "<span class='fail'>❌ No DMARC Record Found</span>";
-        }
+}catch{
+result.innerHTML="<span class='fail'>⚠ DNS Lookup Failed</span>";
+}
 
-    }catch(e){
-        result.innerHTML=
-        "<span class='fail'>⚠️ DNS Scan Failed</span>";
-    }
 }
 
 </script>
 
 </body>
-
 </html>
